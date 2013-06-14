@@ -34,13 +34,13 @@ Add the following in your componser.json:
 
 The bundle comes with a sensible default configuration, which is listed below.
 
-helthe_chronos
-    cache_dir: %kernel.cache_dir%/helthe_chronos
-    crontab:
-        default_user: ~ # If null, edits the crontab of the user running the command.
-        executable: /usr/bin/crontab # Path to crontab executable.
-        run_job: false # If true, will add the helthe:chronos:run command to crontab to be run every minute.
-    enable_annotations: false # If true, allows for the use of annotations.
+    helthe_chronos
+        cache_dir: %kernel.cache_dir%/helthe_chronos
+        crontab:
+            default_user: ~ # If null, edits the crontab of the user running the command.
+            executable: /usr/bin/crontab # Path to crontab executable.
+            run_job: false # If true, will add the helthe:chronos:run command to crontab to be run every minute.
+        enable_annotations: false # If true, allows for the use of annotations.
 
 ## Resources
 
