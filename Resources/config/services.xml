@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="helthe_chronos.crontab.class">Helthe\Component\Chronos\Crontab</parameter>
+        <parameter key="helthe_chronos.job_scheduler.class">Helthe\Component\Chronos\CronJobScheduler</parameter>
+        <parameter key="helthe_chronos.job.command.class">Helthe\Bundle\ChronosBundle\Job\CommandJob</parameter>
+
+        <parameter key="helthe_chronos.metadata.driver.annotation_driver.class">Helthe\Bundle\ChronosBundle\Metadata\Driver\AnnotationDriver</parameter>
+        <parameter key="helthe_chronos.metadata.driver.lazy_loading_driver.class">Metadata\Driver\LazyLoadingDriver</parameter>
+
+        <parameter key="helthe_chronos.metadata.metadata_factory.class">Metadata\MetadataFactory</parameter>
+
+        <parameter key="helthe_chronos.metadata.cache.file_cache.class">Metadata\Cache\FileCache</parameter>
+    </parameters>
+
+    <services>
+        <!-- Metadata Cache -->
+        <service id="helthe_chronos.metadata.cache.file_cache" class="%helthe_chronos.metadata.cache.file_cache.class%" public="false">
+            <argument /><!-- Directory -->
+        </service>
+        <service id="helthe_chronos.metadata.cache" alias="helthe_chronos.metadata.cache.file_cache" public="false" />
+
+        <!-- Metadata Drivers -->
+        <service id="helthe_chronos.metadata.driver.annotation_driver" class="%helthe_chronos.metadata.driver.annotation_driver.class%" public="false">
+            <argument type="service" id="annotation_reader" />
+        </service>
+        <service id="helthe_chronos.metadata.driver.lazy_loading_driver" class="%helthe_chronos.metadata.driver.lazy_loading_driver.class%" public="false">
+            <argument type="service" id="service_container" />
+            <argument>helthe_chronos.metadata.driver</argument>
+        </service>
+        <service id="helthe_chronos.metadata.driver" alias="helthe_chronos.metadata.driver.annotation_driver" />
+
+        <!-- Metadata Factory -->
+        <service id="helthe_chronos.metadata.metadata_factory" class="%helthe_chronos.metadata.metadata_factory.class%">
+            <argument type="service" id="helthe_chronos.metadata.driver.lazy_loading_driver" />
+            <argument>Metadata\ClassHierarchyMetadata</argument>
+            <argument>%kernel.debug%</argument>
+            <call method="setCache">
+                <argument type="service" id="helthe_chronos.metadata.cache" on-invalid="ignore" />
+            </call>
+        </service>
+
+        <!-- Crontab -->
+        <service id="helthe_chronos.crontab" class="%helthe_chronos.crontab.class%">
+            <argument type="collection" />
+            <argument>%helthe_chronos.crontab.executable%</argument>
+        </service>
+
+        <!-- Scheduler -->
+        <service id="helthe_chronos.job_scheduler" class="%helthe_chronos.job_scheduler.class%">
+            <argument type="collection" />
+        </service>
+
+        <!-- Jobs -->
+        <service id="helthe_chronos.job.run_command" class="%helthe_chronos.job.command.class%">
+            <argument>* * * * *</argument>
+            <argument>helthe:chronos:run</argument>
+            <argument>%kernel.root_dir%</argument>
+        </service>
+    </services>
+</container>

@@ -1,0 +1,30 @@
+{
+    "name":        "helthe/chronos-bundle",
+    "type":        "symfony-bundle",
+    "description": "Object oriented cron job management for your Symfony2 project",
+    "keywords":    ["cron", "crontab", "schedule", "scheduling", "cron management", "cron job"],
+    "homepage":    "https://helthe.co",
+    "license":     "MIT",
+    "authors": [
+        {
+            "name": "Carl Alexander",
+            "email": "carlalexander@helthe.co"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": "~2.2",
+        "symfony/finder": "~2.2",
+        "jms/metadata": "~1.3",
+        "helthe/chronos": "~1.0"
+    },
+    "autoload": {
+        "psr-0": { "Helthe\\Bundle\\ChronosBundle\\": "" }
+    },
+    "target-dir": "Helthe/Bundle/ChronosBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
